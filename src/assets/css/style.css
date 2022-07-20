@@ -210,6 +210,11 @@ select {
 }
 
 /* loader */
+.centered {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
 
 .loader {
   width: 60px;

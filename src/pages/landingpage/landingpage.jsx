@@ -1,8 +1,8 @@
 import React from "react";
 import rawTrips from "../../data/trips.json";
 import TripCard from "../../components/trip/tripCard";
+import Loader from "../../components/loader/loader";
 import { useState, useEffect } from "react";
-// import { useSearchParams } from "react-router-dom";
 
 let searchParams;
 
@@ -12,36 +12,6 @@ function Homepage() {
   }, []);
 
   const [trips, setTrips] = useState(rawTrips);
-
-  // const [search, setSearchParams] = useSearchParams();
-
-  // useEffect(() => {
-  //   setSearchParams({});
-  // }, []);
-
-  // const handleFilter = (e) => {
-  //   e.preventDefault();
-
-  //   if (searchParams.has(e.target.name)) {
-  //     setSearchParams(
-  //       Object.fromEntries(
-  //         Array.from(searchParams.entries()).map((entry) => {
-  //           if (entry[0] === e.target.name) {
-  //             return [entry[0], e.target.value];
-  //           } else return entry;
-  //         })
-  //       )
-  //     );
-  //   } else {
-  //     setSearchParams({
-  //       [e.target.name]: e.target.value,
-  //     });
-  //   }
-
-  //   console.log(Array.from(searchParams.entries()));
-
-  //   setTrips(filter(Array.from(searchParams.entries())));
-  // };
 
   const handleFilterChange = (e) => {
     e.preventDefault();
@@ -75,11 +45,15 @@ function Homepage() {
               case "10_x":
                 filteredTrips = filteredTrips.filter((trip) => trip.duration >= 10);
                 break;
+              default:
+                return filteredTrips;
             }
             break;
           case "level":
             filteredTrips = filteredTrips.filter((trip) => trip.level === value);
             break;
+          default:
+            return filteredTrips;
         }
       }
     }

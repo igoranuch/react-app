@@ -11,7 +11,6 @@ function App() {
   return (
     <>
       <Header />
-
       <Routes>
         <Route path="*" element={<Homepage />}></Route>
         <Route path="/trip/:tripId" element={<Trip />}></Route>
@@ -19,7 +18,6 @@ function App() {
         <Route path="/sign-up" element={<SignUp />}></Route>
         <Route path="/sign-in" element={<SignIn />}></Route>
       </Routes>
-
       <Footer />
     </>
   );

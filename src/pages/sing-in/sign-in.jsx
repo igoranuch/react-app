@@ -1,18 +1,50 @@
-import React from "react";
+import { React, useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
+import { loginUser } from "../../store/auth/actions";
+import Loader from "../../components/loader/loader";
 
 function SignIn() {
+  const [userData, setUserData] = useState({
+    email: "",
+    password: "",
+  });
+
+  const { email, password } = userData;
+
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const { user, status, token } = useSelector((state) => state.auth);
+
+  const handleChange = (e) => {
+    setUserData((prevState) => ({
+      ...prevState,
+      [e.target.name]: e.target.value,
+    }));
+  };
 
   const handleSignInButton = (event) => {
     event.preventDefault();
 
-    const password = event.target.password.value;
-
     if (password.length >= 3 && password.length <= 20) {
-      navigate("/");
+      dispatch(
+        loginUser({
+          email,
+          password,
+        })
+      );
     }
   };
+
+  useEffect(() => {
+    if (status === "SUCCESS") {
+      navigate("/");
+    }
+  }, [status, user, token, navigate]);
+
+  if (status === "LOADING") {
+    return <Loader />;
+  }
 
   return (
     <main className="sign-in-page">
@@ -21,11 +53,11 @@ function SignIn() {
         <h2 className="sign-in-form__title">Sign In</h2>
         <label className="trip-popup__input input">
           <span className="input__heading">Email</span>
-          <input name="email" type="email" required />
+          <input onChange={handleChange} name="email" type="email" required />
         </label>
         <label className="trip-popup__input input">
           <span className="input__heading">Password</span>
-          <input name="password" type="password" autoComplete="new-password" required />
+          <input onChange={handleChange} name="password" type="password" autoComplete="new-password" required />
         </label>
         <button className="button" type="submit">
           Sign In
