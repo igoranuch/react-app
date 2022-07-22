@@ -5,10 +5,11 @@ import { useSelector, useDispatch } from "react-redux";
 import { AppDispatch, RootState } from "../../store/store";
 import { ITrip, StateStatus } from "../../types/index";
 import { getAllTrips } from "../../store/trips/actions";
-// import { useSearchParams } from "react-router-dom";
+import { useSearchParams } from "react-router-dom";
 
 function Homepage() {
   const [tripsState, setTrips] = useState<ITrip[] | null>(null);
+  const [searchParams, setSearchParams] = useSearchParams("");
 
   const dispatch: AppDispatch = useDispatch();
   const { trips, status } = useSelector((state: RootState) => state.trips);
@@ -28,22 +29,11 @@ function Homepage() {
     return <Loader />;
   }
 
-  // const [searchParamsState, setSearchParamsState] = useState({
-  //   search: "",
-  //   duration: "",
-  //   level: "",
-  // });
-
-  // const [searchParams, setSearchParams] = useSearchParams(searchParamsState);
-
-  // const handleFilterChange = (e: React.ChangeEvent<HTMLInputElement> | React.ChangeEvent<HTMLSelectElement>) => {
-  //   e.preventDefault();
-
-  //   setSearchParamsState((prevState) => ({
-  //     ...prevState,
-  //     [e.target.name]: e.target.value === "duration" || e.target.value === "level" ? "" : e.target.value,
-  //   }));
-  // };
+  const handleFilterChange = (e: React.ChangeEvent<HTMLInputElement> | React.ChangeEvent<HTMLSelectElement>) => {
+    e.preventDefault();
+    searchParams.set(e.target.name, e.target.value);
+    setSearchParams(searchParams);
+  };
 
   // const filter = (searchParams: URLSearchParams) => {
   //   let filteredTrips = rawTrips;
@@ -89,11 +79,11 @@ function Homepage() {
         <form className="trips-filter__form" autoComplete="off">
           <label className="trips-filter__search input">
             <span className="visually-hidden">Search by name</span>
-            <input name="search" type="search" placeholder="search by title" />
+            <input onChange={handleFilterChange} name="search" type="search" placeholder="search by title" />
           </label>
           <label className="select">
             <span className="visually-hidden">Search by duration</span>
-            <select name="duration">
+            <select onChange={handleFilterChange} name="duration">
               <option value="">duration</option>
               <option value="0_x_5">&lt; 5 days</option>
               <option value="5_x_10">&lt; 10 days</option>
@@ -102,7 +92,7 @@ function Homepage() {
           </label>
           <label className="select">
             <span className="visually-hidden">Search by level</span>
-            <select name="level">
+            <select onChange={handleFilterChange} name="level">
               <option value="">level</option>
               <option value="easy">easy</option>
               <option value="moderate">moderate</option>

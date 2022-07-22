@@ -42,6 +42,13 @@ const Modal: React.FC<ModalProps> = ({ trip, toggleModal }) => {
     toggleModal();
   };
 
+  const getMinDate = () => {
+    const date = new Date();
+    date.setDate(date.getDate() + 1);
+
+    return date.toISOString().split("T")[0];
+  };
+
   return (
     <div className="modal">
       <div className="trip-popup">
@@ -60,13 +67,7 @@ const Modal: React.FC<ModalProps> = ({ trip, toggleModal }) => {
           </div>
           <label className="trip-popup__input input">
             <span className="input__heading">Date</span>
-            <input
-              onChange={handleDate}
-              name="date"
-              type="date"
-              min={new Date().toISOString().split("T")[0]}
-              required
-            />
+            <input onChange={handleDate} name="date" type="date" min={getMinDate()} required />
           </label>
           <label className="trip-popup__input input">
             <span className="input__heading">Number of guests</span>

@@ -5,6 +5,7 @@ import Loader from "../../components/Loader";
 import { getAllBookings, deleteBooking } from "../../store/bookings/actions";
 import { AppDispatch, RootState } from "../../store/store";
 import { IBooking, StateStatus } from "../../types";
+import { resetDeleted } from "../../store/bookings/reducer";
 
 function BookingsList() {
   const [bookingsState, setBookings] = useState<IBooking[] | null>(null);
@@ -25,6 +26,7 @@ function BookingsList() {
 
     if (isDeleted === StateStatus.SUCCESS && deletedBookingId && bookingsState) {
       setBookings(bookingsState.filter((booking) => booking.id !== deletedBookingId));
+      dispatch(resetDeleted());
     }
   }, [status, isDeleted]);
 

@@ -1,8 +1,8 @@
 import { configureStore } from "@reduxjs/toolkit";
 import auth from "./auth/reducer";
 import trips from "./trips/reducer";
-import { reducer as trip } from "./trip/reducer";
-import { reducer as bookings } from "./bookings/reducer";
+import trip from "./trip/reducer";
+import bookings from "./bookings/reducer";
 import { useDispatch } from "react-redux";
 
 export const store = configureStore({

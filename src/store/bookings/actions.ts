@@ -21,5 +21,5 @@ export const deleteBooking = createAsyncThunk("deleteBooking", async (payload: d
 
   const response = await bookingService.deleteOne(token, bookingId);
 
-  return { response };
+  return { response, bookingId };
 });
