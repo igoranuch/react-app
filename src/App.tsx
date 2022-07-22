@@ -41,7 +41,7 @@ function App() {
       reset();
     }
 
-    if (status === StateStatus.ERROR) {
+    if (status === StateStatus.ERROR && location.pathname != "/sign-up") {
       dispatch(logOut());
       navigate("/sign-in");
     }
@@ -51,7 +51,7 @@ function App() {
     <>
       <Header signOut={toggleIsAuthenticated} isAuth={isAuthenticated} />
       <Routes>
-        <Route path="*" element={<Homepage />}></Route>
+        <Route path="/" element={<Homepage />}></Route>
         <Route path="/trip/:tripId" element={<Trip />}></Route>
         <Route path="/bookings" element={<Bookings />}></Route>
         <Route path="/sign-up" element={<SignUp />}></Route>

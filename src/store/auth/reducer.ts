@@ -32,11 +32,11 @@ const reducer = createSlice({
     });
 
     builder.addCase(registerUser.fulfilled, (state, { payload }) => {
-      const { data } = payload;
+      const { user, token } = payload;
 
       state.status = StateStatus.SUCCESS;
-      state.user = data.user as User;
-      state.token = data.token;
+      state.user = user;
+      state.token = token;
     });
 
     builder.addCase(registerUser.rejected, (state, { payload }) => {
@@ -49,11 +49,11 @@ const reducer = createSlice({
     });
 
     builder.addCase(loginUser.fulfilled, (state, { payload }) => {
-      const { data } = payload;
+      const { user, token } = payload;
 
       state.status = StateStatus.SUCCESS;
-      state.user = data.user as User;
-      state.token = data.token;
+      state.user = user;
+      state.token = token;
     });
 
     builder.addCase(loginUser.rejected, (state, { payload }) => {
@@ -66,10 +66,10 @@ const reducer = createSlice({
     });
 
     builder.addCase(getAuthenticatedUser.fulfilled, (state, { payload }) => {
-      const { data } = payload;
+      const { user } = payload;
 
       state.status = StateStatus.SUCCESS;
-      state.user = data as User;
+      state.user = user;
     });
 
     builder.addCase(getAuthenticatedUser.rejected, (state, { payload }) => {
