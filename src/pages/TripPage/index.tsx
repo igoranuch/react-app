@@ -14,11 +14,9 @@ function Trip() {
   const [showModal, setShowModal] = useState(false);
 
   const dispatch: AppDispatch = useDispatch();
-  const { trip, status, token } = useSelector((state: RootState) => ({
-    status: state.trip.status,
-    trip: state.trip.trip,
-    token: state.auth.token,
-  }));
+
+  const { trip, status } = useSelector((state: RootState) => state.trip);
+  const { token } = useSelector((state: RootState) => state.auth);
 
   useEffect(() => {
     token && tripId && dispatch(getOneTrip({ token, tripId }));
