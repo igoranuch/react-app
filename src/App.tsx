@@ -3,9 +3,9 @@ import Footer from "./components/Footer";
 import Header from "./components/Header";
 import Homepage from "./pages/LandingPage";
 import Bookings from "./pages/BookingsPage";
-import SignIn from "./pages/SignIn/sign-in";
+import SignIn from "./pages/SignIn";
 import SignUp from "./pages/SignUp";
-import Trip from "./pages/Trips";
+import Trip from "./pages/TripPage";
 
 function App() {
   return (

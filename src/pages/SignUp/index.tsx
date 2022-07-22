@@ -5,6 +5,7 @@ import { registerUser } from "../../store/auth/actions";
 import Loader from "../../components/Loader";
 import { AppDispatch, RootState } from "../../store/store";
 import { StateStatus } from "../../types/index";
+import { reset } from "../../store/auth/reducer";
 
 function SignUp() {
   const [userData, setUserData] = useState({
@@ -28,6 +29,7 @@ function SignUp() {
 
   const handleSignUpButton = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+
     if (password.length >= 3 && password.length <= 20) {
       dispatch(
         registerUser({
@@ -42,8 +44,9 @@ function SignUp() {
   useEffect(() => {
     if (status === StateStatus.SUCCESS) {
       navigate("/");
+      dispatch(reset());
     }
-  }, [status, navigate]);
+  }, [status, navigate, dispatch]);
 
   if (status === StateStatus.LOADING) {
     return <Loader />;

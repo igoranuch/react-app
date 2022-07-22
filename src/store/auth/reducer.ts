@@ -1,4 +1,4 @@
-import { createReducer } from "@reduxjs/toolkit";
+import { createSlice } from "@reduxjs/toolkit";
 import { IAuthState, StateStatus } from "../../types";
 import { getAuthenticatedUser, loginUser, registerUser } from "./actions";
 
@@ -10,41 +10,63 @@ const initialState: IAuthState = {
   token,
 };
 
-const reducer = createReducer(initialState, (builder) => {
-  builder.addCase(registerUser.pending, (state) => {
-    state.status = StateStatus.LOADING;
-  });
+const reducer = createSlice({
+  name: "auth",
+  initialState,
+  reducers: {
+    reset: (state) => {
+      state.status = StateStatus.IDLE;
+    },
+  },
+  extraReducers: (builder) => {
+    builder.addCase(registerUser.pending, (state) => {
+      state.status = StateStatus.LOADING;
+    });
 
-  builder.addCase(registerUser.fulfilled, (state, { payload }) => {
-    const { user } = payload;
+    builder.addCase(registerUser.fulfilled, (state, { payload }) => {
+      const { user } = payload;
 
-    state.status = StateStatus.SUCCESS;
-    state.user = user.user;
-    state.token = user.token;
-  });
+      state.status = StateStatus.SUCCESS;
+      state.user = user.user;
+      state.token = user.token;
+    });
 
-  builder.addCase(loginUser.pending, (state) => {
-    state.status = StateStatus.LOADING;
-  });
+    builder.addCase(registerUser.rejected, (state) => {
+      state.status = StateStatus.ERROR;
+    });
 
-  builder.addCase(loginUser.fulfilled, (state, { payload }) => {
-    const { user } = payload;
+    builder.addCase(loginUser.pending, (state) => {
+      state.status = StateStatus.LOADING;
+    });
 
-    state.status = StateStatus.SUCCESS;
-    state.user = user.user;
-    state.token = user.token;
-  });
+    builder.addCase(loginUser.fulfilled, (state, { payload }) => {
+      const { user } = payload;
 
-  builder.addCase(getAuthenticatedUser.pending, (state) => {
-    state.status = StateStatus.LOADING;
-  });
+      state.status = StateStatus.SUCCESS;
+      state.user = user.user;
+      state.token = user.token;
+    });
 
-  builder.addCase(getAuthenticatedUser.fulfilled, (state, { payload }) => {
-    const { user } = payload;
+    builder.addCase(loginUser.rejected, (state) => {
+      state.status = StateStatus.ERROR;
+    });
 
-    state.status = StateStatus.SUCCESS;
-    state.user = user;
-  });
+    builder.addCase(getAuthenticatedUser.pending, (state) => {
+      state.status = StateStatus.LOADING;
+    });
+
+    builder.addCase(getAuthenticatedUser.fulfilled, (state, { payload }) => {
+      const { user } = payload;
+
+      state.status = StateStatus.SUCCESS;
+      state.user = user;
+    });
+
+    builder.addCase(getAuthenticatedUser.rejected, (state) => {
+      state.status = StateStatus.ERROR;
+    });
+  },
 });
 
-export { reducer };
+export const { reset } = reducer.actions;
+export default reducer.reducer;

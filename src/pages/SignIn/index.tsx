@@ -5,6 +5,7 @@ import { loginUser } from "../../store/auth/actions";
 import Loader from "../../components/Loader";
 import { AppDispatch, RootState } from "../../store/store";
 import { StateStatus } from "../../types/index";
+import { reset } from "../../store/auth/reducer";
 
 function SignIn() {
   const [userData, setUserData] = useState({
@@ -41,8 +42,9 @@ function SignIn() {
   useEffect(() => {
     if (status === StateStatus.SUCCESS) {
       navigate("/");
+      dispatch(reset());
     }
-  }, [status, navigate]);
+  }, [status, navigate, dispatch]);
 
   if (status === StateStatus.LOADING) {
     return <Loader />;

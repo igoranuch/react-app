@@ -1,5 +1,9 @@
 import { useState } from "react";
 import { ITrip } from "../../types";
+import { AppDispatch, RootState } from "../../store/store";
+import { ICreatedBooking } from "../../types";
+import { useSelector, useDispatch } from "react-redux";
+import { addBooking } from "../../store/bookings/actions";
 
 type ModalProps = {
   trip: ITrip | undefined;
@@ -8,13 +12,33 @@ type ModalProps = {
 
 const Modal: React.FC<ModalProps> = ({ trip, toggleModal }) => {
   const [guests, setGuests] = useState(1);
+  const [date, setDate] = useState("");
+
+  const dispatch: AppDispatch = useDispatch();
+  const { token, user } = useSelector((state: RootState) => state.auth);
 
   const handleGuests = (e: React.ChangeEvent<HTMLInputElement>) => {
     setGuests(Number(e.target.value));
   };
 
+  const handleDate = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setDate(e.target.value);
+  };
+
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+
+    if (token && user && trip) {
+      const booking: ICreatedBooking = {
+        tripId: trip.id,
+        userId: user.id,
+        guests: guests,
+        date: date,
+      };
+
+      dispatch(addBooking({ token, booking }));
+    }
+
     toggleModal();
   };
 
@@ -36,7 +60,13 @@ const Modal: React.FC<ModalProps> = ({ trip, toggleModal }) => {
           </div>
           <label className="trip-popup__input input">
             <span className="input__heading">Date</span>
-            <input name="date" type="date" min={new Date().toISOString().split("T")[0]} required />
+            <input
+              onChange={handleDate}
+              name="date"
+              type="date"
+              min={new Date().toISOString().split("T")[0]}
+              required
+            />
           </label>
           <label className="trip-popup__input input">
             <span className="input__heading">Number of guests</span>

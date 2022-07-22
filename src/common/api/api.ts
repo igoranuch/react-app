@@ -5,8 +5,8 @@ const API = {
   GET_AUTH_USER: "/auth/authenticated-user",
   GET_ALL_TRIPS: "/trips",
   GET_ONE_TRIP: "/trips/",
-  BOOKINGS: "bookings",
-  DELETE_BOOKING: "bookings/",
+  BOOKINGS: "/bookings",
+  DELETE_BOOKING: "/bookings/",
 };
 
 export default API;

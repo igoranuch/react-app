@@ -4,10 +4,16 @@ import { ReactComponent as User } from "../../assets/images/user.svg";
 import { useSelector } from "react-redux";
 import { authRoutes } from "../../common/authRoutes";
 import { RootState } from "../../store/store";
+import { useEffect, useState } from "react";
 
 function Header() {
+  const [username, setUsername] = useState("");
   const location = useLocation();
   const { user } = useSelector((state: RootState) => state.auth);
+
+  useEffect(() => {
+    if (user) setUsername(user.fullName);
+  }, [user]);
 
   return (
     <header className="header">
@@ -30,7 +36,7 @@ function Header() {
                   <span className="visually-hidden">Profile</span>
                   <User />
                   <ul className="profile-nav__list">
-                    <li className="profile-nav__item profile-nav__username">{user?.fullName}</li>
+                    <li className="profile-nav__item profile-nav__username">{username}</li>
                     <li className="profile-nav__item">
                       <Link to={"/sign-in"}>
                         <button className="profile-nav__sign-out button">Sign Out</button>

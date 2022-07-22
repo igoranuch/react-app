@@ -4,6 +4,22 @@ export interface IAuthState {
   token: string | null;
 }
 
+export interface ITripsState {
+  trips: ITrip[] | null;
+  status: StateStatus;
+}
+
+export interface ITripState {
+  trip: ITrip | null;
+  status: StateStatus;
+}
+
+export interface IBookingsState {
+  bookings: IBooking[] | null;
+  status: StateStatus;
+  isDeleted: StateStatus;
+}
+
 export enum StateStatus {
   IDLE = "IDLE",
   LOADING = "LOADING",
@@ -12,6 +28,7 @@ export enum StateStatus {
 }
 
 export interface IBooking {
+  id: string;
   tripId: string;
   userId: string;
   guests: number;
@@ -64,4 +81,19 @@ export type User = {
 export type PostUserRes = {
   token: string;
   user: User;
+};
+
+export type TripPayload = {
+  token: string;
+  tripId: string;
+};
+
+export type addBookingPayload = {
+  token: string;
+  booking: ICreatedBooking;
+};
+
+export type deleteBookingPayload = {
+  token: string;
+  bookingId: string;
 };

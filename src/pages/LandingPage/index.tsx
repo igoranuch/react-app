@@ -1,34 +1,56 @@
-import rawTrips from "../../data/trips.json";
 import TripCard from "../../components/Trip";
+import Loader from "../../components/Loader";
 import { useState, useEffect } from "react";
-
-// let searchParams: URLSearchParams;
+import { useSelector, useDispatch } from "react-redux";
+import { AppDispatch, RootState } from "../../store/store";
+import { ITrip, StateStatus } from "../../types/index";
+import { getAllTrips } from "../../store/trips/actions";
+// import { useSearchParams } from "react-router-dom";
 
 function Homepage() {
-  // useEffect(() => {
-  //   searchParams = new URLSearchParams();
-  // }, []);
+  const [tripsState, setTrips] = useState<ITrip[] | null>(null);
 
-  const [trips, setTrips] = useState(rawTrips);
+  const dispatch: AppDispatch = useDispatch();
+  const { trips, status } = useSelector((state: RootState) => state.trips);
+  const { token } = useSelector((state: RootState) => state.auth);
+
+  useEffect(() => {
+    token && dispatch(getAllTrips(token));
+  }, []);
+
+  useEffect(() => {
+    if (status === StateStatus.SUCCESS && trips) {
+      setTrips(trips);
+    }
+  }, [status, trips, dispatch]);
+
+  if (status === StateStatus.LOADING) {
+    return <Loader />;
+  }
+
+  // const [searchParamsState, setSearchParamsState] = useState({
+  //   search: "",
+  //   duration: "",
+  //   level: "",
+  // });
+
+  // const [searchParams, setSearchParams] = useSearchParams(searchParamsState);
 
   // const handleFilterChange = (e: React.ChangeEvent<HTMLInputElement> | React.ChangeEvent<HTMLSelectElement>) => {
   //   e.preventDefault();
 
-  //   e.target.value === "duration" || e.target.value === "level"
-  //     ? searchParams.set(`${e.target.name}`, "")
-  //     : searchParams.set(`${e.target.name}`, e.target.value);
-
-  //   setTrips(filter(searchParams));
+  //   setSearchParamsState((prevState) => ({
+  //     ...prevState,
+  //     [e.target.name]: e.target.value === "duration" || e.target.value === "level" ? "" : e.target.value,
+  //   }));
   // };
 
   // const filter = (searchParams: URLSearchParams) => {
   //   let filteredTrips = rawTrips;
 
-  //   for (const param of searchParams) {
-  //     const [name, value] = param;
-
+  //   searchParams.forEach((value, key) => {
   //     if (value !== "") {
-  //       switch (name) {
+  //       switch (key) {
   //         case "search":
   //           filteredTrips = filteredTrips.filter((trip) => trip.title.toLowerCase().startsWith(value.toLowerCase()));
   //           break;
@@ -44,17 +66,17 @@ function Homepage() {
   //               filteredTrips = filteredTrips.filter((trip) => trip.duration >= 10);
   //               break;
   //             default:
-  //               return filteredTrips;
+  //               break;
   //           }
   //           break;
   //         case "level":
   //           filteredTrips = filteredTrips.filter((trip) => trip.level === value);
   //           break;
   //         default:
-  //           return filteredTrips;
+  //           break;
   //       }
   //     }
-  //   }
+  //   });
 
   //   return filteredTrips;
   // };
@@ -92,9 +114,10 @@ function Homepage() {
       <section className="trips">
         <h2 className="visually-hidden">Trips List</h2>
         <ul className="trip-list">
-          {trips.map((trip) => {
-            return <TripCard trip={trip} key={trip.id} />;
-          })}
+          {tripsState &&
+            tripsState.map((trip) => {
+              return <TripCard trip={trip} key={trip.id} />;
+            })}
         </ul>
       </section>
     </main>
