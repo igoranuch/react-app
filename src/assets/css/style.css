@@ -210,6 +210,11 @@ select {
 }
 
 /* loader */
+.centered {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
 
 .loader {
   width: 60px;
@@ -290,6 +295,7 @@ select {
   font-size: var(--font-size-500);
   font-family: "Playfair Display", serif;
   text-decoration: none;
+  cursor: pointer;
 }
 
 .header__nav {
