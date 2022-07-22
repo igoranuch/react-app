@@ -1,26 +1,47 @@
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { ReactComponent as Briefcase } from "../../assets/images/briefcase.svg";
 import { ReactComponent as User } from "../../assets/images/user.svg";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { authRoutes } from "../../common/authRoutes";
-import { RootState } from "../../store/store";
+import { AppDispatch, RootState } from "../../store/store";
 import { useEffect, useState } from "react";
+import { logOut } from "../../store/auth/reducer";
 
-function Header() {
+type HeaderProps = {
+  isAuth: boolean;
+  signOut: () => void;
+};
+
+const Header: React.FC<HeaderProps> = ({ signOut, isAuth }) => {
   const [username, setUsername] = useState("");
+
   const location = useLocation();
+  const navigate = useNavigate();
   const { user } = useSelector((state: RootState) => state.auth);
+  const dispatch: AppDispatch = useDispatch();
 
   useEffect(() => {
     if (user) setUsername(user.fullName);
   }, [user]);
 
+  const handleLogout = () => {
+    dispatch(logOut());
+    signOut();
+    navigate("/sign-in");
+  };
+
+  const handleLogoClick = () => {
+    if (isAuth) {
+      navigate("/");
+    }
+  };
+
   return (
     <header className="header">
       <div className="header__inner">
-        <Link className="header__logo" to="/">
+        <span onClick={handleLogoClick} className="header__logo">
           Travel App
-        </Link>
+        </span>
 
         {!authRoutes.includes(location.pathname) && (
           <nav className="header__nav">
@@ -38,9 +59,9 @@ function Header() {
                   <ul className="profile-nav__list">
                     <li className="profile-nav__item profile-nav__username">{username}</li>
                     <li className="profile-nav__item">
-                      <Link to={"/sign-in"}>
-                        <button className="profile-nav__sign-out button">Sign Out</button>
-                      </Link>
+                      <button onClick={handleLogout} className="profile-nav__sign-out button">
+                        Sign Out
+                      </button>
                     </li>
                   </ul>
                 </div>
@@ -51,6 +72,6 @@ function Header() {
       </div>
     </header>
   );
-}
+};
 
 export default Header;

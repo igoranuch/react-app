@@ -2,6 +2,7 @@ export interface IAuthState {
   user: User | null;
   status: StateStatus;
   token: string | null;
+  message: string;
 }
 
 export interface ITripsState {

@@ -6,6 +6,8 @@ import Loader from "../../components/Loader";
 import { AppDispatch, RootState } from "../../store/store";
 import { StateStatus } from "../../types/index";
 import { reset } from "../../store/auth/reducer";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 function SignIn() {
   const [userData, setUserData] = useState({
@@ -17,7 +19,7 @@ function SignIn() {
 
   const navigate = useNavigate();
   const dispatch: AppDispatch = useDispatch();
-  const { status } = useSelector((state: RootState) => state.auth);
+  const { status, message } = useSelector((state: RootState) => state.auth);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setUserData((prevState) => ({
@@ -44,7 +46,20 @@ function SignIn() {
       navigate("/");
       dispatch(reset());
     }
-  }, [status, navigate, dispatch]);
+
+    if (status === StateStatus.ERROR) {
+      toast.error(message, {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
+      dispatch(reset());
+    }
+  }, [status]);
 
   if (status === StateStatus.LOADING) {
     return <Loader />;
@@ -52,6 +67,7 @@ function SignIn() {
 
   return (
     <main className="sign-in-page">
+      <ToastContainer />
       <h1 className="visually-hidden">Travel App</h1>
       <form onSubmit={handleSignInButton} className="sign-in-form" autoComplete="off">
         <h2 className="sign-in-form__title">Sign In</h2>
