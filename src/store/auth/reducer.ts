@@ -66,10 +66,8 @@ const reducer = createSlice({
     });
 
     builder.addCase(getAuthenticatedUser.fulfilled, (state, { payload }) => {
-      const { user } = payload;
-
       state.status = StateStatus.SUCCESS;
-      state.user = user;
+      state.user = payload;
     });
 
     builder.addCase(getAuthenticatedUser.rejected, (state, { payload }) => {
